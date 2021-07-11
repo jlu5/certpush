@@ -4,3 +4,5 @@ certbot-config/
 *.bak
 *.old
 
+renew.sh
+certpush.config.sh

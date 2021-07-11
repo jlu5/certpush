@@ -1,5 +1,5 @@
 #!/bin/bash
-# A frontend to certbot for managing IRC RR TLS certificates.
+# A frontend to certbot for managing TLS certificates for DNS round robins.
 
 error() {
     echo "ERROR: $*"
@@ -8,12 +8,21 @@ error() {
 
 cd "${0%/*}" || { error "Could not cd to script dir"; }
 
-. ../scripts/config.sh || { error "Could not find config.sh"; }
 . certpush.config.sh || { error "Could not find certpush.config.sh"; }
 
 if [[ "$TEST_MODE" == true ]]; then
     CERTBOT_BASE_ARGS+=(--test-cert)
 fi
+
+getpath () {
+    # Support server-specific paths if defined.
+    if [[ -n "${TARGET_PATHS[$1]}" ]]; then
+        target_path="${TARGET_PATHS[$1]}"
+    else
+        target_path="$DEFAULT_TARGETPATH"
+    fi
+    echo "$target_path"
+}
 
 newserver() {
     server="$1"
@@ -50,7 +59,7 @@ push() {
     if [[ -z "$1" ]]; then
         error "no server name given to push()"
     fi
-	target_path="$(getpath "$1")"
+    target_path="$(getpath "$1")"
 
     certfile="$(readlink -f "$CONFIG_DIR/live/$1/fullchain.pem")"
     keyfile="$(readlink -f "$CONFIG_DIR/live/$1/privkey.pem")"
@@ -63,13 +72,17 @@ push() {
     echo "Syncing files for server $1:"
     certfile_path="${SERVERS[$1]}:${target_path}/certpush.pem"
     keyfile_path="${SERVERS[$1]}:${target_path}/certpush.key"
+    renewsh_path="${SERVERS[$1]}:${target_path}/renew.sh"
 
     echo "Syncing $certfile to $certfile_path"
     scp ${OPTIONS[$1]} "$certfile" "$certfile_path"
     echo "Syncing $keyfile to $keyfile_path"
     scp ${OPTIONS[$1]} "$keyfile" "$keyfile_path"
-    # TODO: make this configurable
-    ssh ${OPTIONS[$1]} "${SERVERS[$1]}" killall -USR1 inspircd
+
+    echo "Syncing renew.sh to $renewsh_path"
+    scp ${OPTIONS[$1]} "renew.sh" "$renewsh_path"
+    echo "Running renewal script for server $1"
+    ssh ${OPTIONS[$1]} "${SERVERS[$1]}" "bash ${target_path}/renew.sh"
 }
 
 push_all() {

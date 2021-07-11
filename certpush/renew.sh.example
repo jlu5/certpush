@@ -1,0 +1,5 @@
+#!/bin/bash
+# Example renewal script for nginx
+# Rename this to renew.sh
+
+sudo nginx -s reload
