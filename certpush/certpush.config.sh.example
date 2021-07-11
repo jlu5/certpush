@@ -4,6 +4,9 @@
 # Sets the target conf dir for remote servers (where we will push our configs).
 # This is the DEFAULT path, which can be overridden by TARGET_PATHS below.
 export DEFAULT_TARGETPATH="/etc/ssl/private"
+# Paths to write the files to in the target folder
+export CERT_NAME="fullchain.pem"
+export KEY_NAME="privkey.pem"
 
 # List of DNS names to push to each server - addresses for each server are comma separated
 declare -A CERTPUSH_SERVERS=([server1.example.com]="server1.example.com,server1.example.net"

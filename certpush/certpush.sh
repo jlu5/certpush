@@ -70,8 +70,8 @@ push() {
     fi
 
     echo "Syncing files for server $1:"
-    certfile_path="$1:${target_path}/certpush.pem"
-    keyfile_path="$1:${target_path}/certpush.key"
+    certfile_path="$1:${target_path}/${CERT_NAME}"
+    keyfile_path="$1:${target_path}/${KEY_NAME}"
     renewsh_path="$1:${target_path}/renew.sh"
 
     echo "Syncing $certfile to $certfile_path"
