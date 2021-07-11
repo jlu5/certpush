@@ -70,9 +70,9 @@ push() {
     fi
 
     echo "Syncing files for server $1:"
-    certfile_path="${SERVERS[$1]}:${target_path}/certpush.pem"
-    keyfile_path="${SERVERS[$1]}:${target_path}/certpush.key"
-    renewsh_path="${SERVERS[$1]}:${target_path}/renew.sh"
+    certfile_path="$1:${target_path}/certpush.pem"
+    keyfile_path="$1:${target_path}/certpush.key"
+    renewsh_path="$1:${target_path}/renew.sh"
 
     echo "Syncing $certfile to $certfile_path"
     scp ${OPTIONS[$1]} "$certfile" "$certfile_path"
@@ -82,7 +82,7 @@ push() {
     echo "Syncing renew.sh to $renewsh_path"
     scp ${OPTIONS[$1]} "renew.sh" "$renewsh_path"
     echo "Running renewal script for server $1"
-    ssh ${OPTIONS[$1]} "${SERVERS[$1]}" "bash ${target_path}/renew.sh"
+    ssh ${OPTIONS[$1]} "$1" "bash ${target_path}/renew.sh"
 }
 
 push_all() {

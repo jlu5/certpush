@@ -5,18 +5,15 @@
 # This is the DEFAULT path, which can be overridden by TARGET_PATHS below.
 export DEFAULT_TARGETPATH="/etc/ssl/private"
 
-# Target hosts to connect to
-declare -A SERVERS=([server1]="example@server1.somenet.net" [server2]="username@server2.example.net")
+# List of DNS names to push to each server - addresses for each server are comma separated
+declare -A CERTPUSH_SERVERS=([server1.example.com]="server1.example.com,server1.example.net"
+                             [server2.example.com]="server2.example.com")
 
 # Server specific scp options
 declare -A OPTIONS=()
 
 # Server specific target paths
-declare -A TARGET_PATHS=([server1]="/var/lib/example/ssl/")
-
-# List of DNS names to push to each server - addresses for each server are comma separated
-declare -A CERTPUSH_SERVERS=([server1]="server1.example.com,server1.example.net"
-                             [server2]="server2.example.com")
+declare -A TARGET_PATHS=([server1.example.com]="/var/lib/example/ssl/")
 
 # List of DNS names to add to all servers (Round robin addresses)
 POOL_NAMES=("pool.example.com pool.example.net)
