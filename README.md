@@ -17,4 +17,12 @@ Usage:
 ./certpush.sh runcmd [command] [args] - run arbitrary certbot commands under certpush's config directories
 ```
 
-`certpush.sh renew` can be added to a cron job to ensure that certificates are kept up to date.
+## Cron job
+
+As certpush uses a custom folder for the certbot path, you should add `certpush.sh renew` to a cron job or a similar service to ensure that certificates are kept up to date.
+
+Example (weekly at 9 AM):
+
+```
+0 9 * * 1 /path/to/your/certpush.sh renew
+```
