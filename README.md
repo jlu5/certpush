@@ -4,8 +4,6 @@ Certpush is a utility that generates Let's Encrypt TLS certificates for DNS roun
 
 Certpush was originally designed to provide TLS to IRC round robins, but has been extended to support shared DNS names in general (e.g. websites backed by anycast or GeoDNS).
 
-Certpush uses the same scp-syncing mechanism as conf-sync below, and shares some config elements with it (target server addresses and paths).
-
 An example configuration lives in `certpush/certpush.config.sh.example`.
 
 ```
